@@ -11,7 +11,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- Menú lateral -->
-        <Border Grid.Column="0" Background="#FF2D2D30" Padding="10">
+        <Border Grid.Column="0" Background="#683475" Padding="10">
             <StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                     <Image Source="Logo.png" Width="32" Height="32"/>
@@ -51,11 +51,12 @@
                 <CheckBox x:Name="ChkEjecutarInicio" Content="Ejecutar al inicio" Margin="0,0,0,10"/>
                 <GroupBox Header="Información de la App" Margin="0,20,0,0">
                     <StackPanel>
-                        <TextBlock Text="StickerApp v1.0" Margin="0,0,0,5"/>
+                        <TextBlock Text="StickerApp v1.0" FontWeight="Bold" Margin="0,0,0,5"/>
                         <TextBlock Text="Aplicación para mostrar stickers en el escritorio" Margin="0,0,0,5"/>
-                        <TextBlock>
-                            <Hyperlink NavigateUri="https://github.com/tuusuario/stickerapp"
-                                       RequestNavigate="Hyperlink_RequestNavigate">
+                        <TextBlock Text="Licencia: GNU GENERAL PUBLIC LICENSE" Margin="0,0,0,5"/>
+                        <TextBlock Margin="0,5,0,0">
+                            <Hyperlink NavigateUri="https://github.com/JnBenites/StickerApp"
+                                    RequestNavigate="Hyperlink_RequestNavigate">
                                 Visitar GitHub
                             </Hyperlink>
                         </TextBlock>

@@ -47,7 +47,6 @@ namespace StickerApp
             List<ImagenItem> imagenes = new List<ImagenItem>
             {
                 new ImagenItem { Path = "sticker1.png" },
-                new ImagenItem { Path = "sticker2.gif" }
             };
 
             ListaImagenes.ItemsSource = imagenes;
