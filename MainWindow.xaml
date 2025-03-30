@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:wpfAnimatedGif="http://wpfanimatedgif.codeplex.com"
-        Title="Sticker App" Height="350" Width="525"
+        Title="Sticker App" Height="450" Width="600"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -11,18 +11,18 @@
         </Grid.ColumnDefinitions>
 
         <!-- Menú lateral -->
-        <Border Grid.Column="0" Background="#683475" Padding="10">
+        <Border Grid.Column="0" Background="#2E1E55" Padding="10">
             <StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                     <Image Source="Logo.png" Width="32" Height="32"/>
-                    <TextBlock Text="StickerApp" Foreground="White" FontSize="16"
-                               FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="StickerApp" Foreground="White" FontSize="16" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
-
-                <Button x:Name="BtnImagenes" Content="Imágenes"
-                        Style="{StaticResource MenuButtonStyle}" Click="BtnImagenes_Click"/>
-                <Button x:Name="BtnAjustes" Content="Ajustes"
-                        Style="{StaticResource MenuButtonStyle}" Click="BtnAjustes_Click"/>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,1" Background="#582E67">
+                    <Button x:Name="BtnImagenes" Content="Imágenes" Style="{StaticResource MenuButtonStyle}" Click="BtnImagenes_Click"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,1" Background="#582E67">
+                    <Button x:Name="BtnAjustes" Content="Ajustes" Style="{StaticResource MenuButtonStyle}" Click="BtnAjustes_Click"/>
+                </StackPanel>
             </StackPanel>
         </Border>
 
@@ -32,18 +32,24 @@
             <StackPanel x:Name="PanelImagenes" Margin="10">
                 <Button Content="Agregar nueva imagen" Width="150" Margin="0,0,0,10"
                         Click="AgregarImagen_Click"/>
-                <ListView x:Name="ListaImagenes">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="{Binding Path}" Width="50" Height="50" Margin="0,0,10,0"/>
-                                <Button Content="Sticker ON/OFF" Click="Sticker_Click" Tag="{Binding Path}"/>
-                                <Button Content="Eliminar"
-                                        Click="EliminarImagen_Click" Tag="{Binding Path}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    <ListView x:Name="ListaImagenes">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10" Background="#582E67">
+                                    <Image Source="{Binding Path}" Width="100" Height="50" Margin="0,0,10,0"/>
+
+                                    <!-- Escala individual -->
+                                    <StackPanel Orientation="Horizontal" Width="100" VerticalAlignment="Center" Margin="0,0,10,0">
+                                        <TextBlock Text="%" VerticalAlignment="Center" Foreground="Black" Margin="0,0,3,0"/>
+                                        <TextBox Width="30" Text="100" Tag="{Binding Path}" x:Name="EscalaInput"/>
+                                    </StackPanel>
+
+                                    <CheckBox Content="Estado" Checked="Sticker_Click" Unchecked="Sticker_Click" Tag="{Binding Path}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                    <Button Content="Eliminar" Click="EliminarImagen_Click" Tag="{Binding Path}" Background="#F5E6E3"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
             </StackPanel>
 
             <!-- Panel de ajustes -->

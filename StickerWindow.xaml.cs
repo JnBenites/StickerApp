@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -9,23 +10,37 @@ namespace StickerApp
 {
     public partial class StickerWindow : Window
     {
-        public StickerWindow(string imagePath)
+        public StickerWindow(string imagePath, int escalaPorcentaje)
         {
             InitializeComponent();
 
             try
             {
-                var image = new BitmapImage();
-                image.BeginInit();
-                image.UriSource = new Uri(imagePath, UriKind.Absolute);
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.EndInit();
+                string rutaAbsoluta = Path.GetFullPath(imagePath);
 
-                ImageBehavior.SetAnimatedSource(StickerImage, image);
+                if (File.Exists(rutaAbsoluta))
+                {
+                    var image = new BitmapImage();
+                    image.BeginInit();
+                    image.UriSource = new Uri(rutaAbsoluta, UriKind.Absolute);
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.EndInit();
+
+                    ImageBehavior.SetAnimatedSource(StickerImage, image);
+
+                    StickerImage.Width = image.PixelWidth * (escalaPorcentaje / 100.0);
+                    StickerImage.Height = image.PixelHeight * (escalaPorcentaje / 100.0);
+                }
+                else
+                {
+                    MessageBox.Show($"No se encontró la imagen: {rutaAbsoluta}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Close(); // Cierra si no se pudo cargar
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                // Imagen inválida
+                MessageBox.Show($"Error al cargar la imagen:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Close();
             }
 
             MouseLeftButtonDown += (s, e) =>

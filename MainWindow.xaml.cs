@@ -5,6 +5,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Win32;
+using System.Windows.Media;
+using System.Windows.Controls.Primitives;
+
 
 namespace StickerApp
 {
@@ -44,13 +47,18 @@ namespace StickerApp
         }
         private void CargarImagenes()
         {
-            List<ImagenItem> imagenes = new List<ImagenItem>
+            var imagenes = new List<ImagenItem>();
+
+            string pathEjemplo = System.IO.Path.GetFullPath("sticker1.png");
+
+            if (System.IO.File.Exists(pathEjemplo))
             {
-                new ImagenItem { Path = "sticker1.png" },
-            };
+                imagenes.Add(new ImagenItem { Path = pathEjemplo });
+            }
 
             ListaImagenes.ItemsSource = imagenes;
         }
+
 
         private void BtnImagenes_Click(object sender, RoutedEventArgs e)
         {
@@ -85,19 +93,46 @@ namespace StickerApp
 
         private void Sticker_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.Tag is string path)
+            if (sender is CheckBox chk && chk.Tag is string path)
             {
-                if (ventanasAbiertas.ContainsKey(path))
+                if (chk.IsChecked == true)
                 {
-                    ventanasAbiertas[path].Close();
-                    ventanasAbiertas.Remove(path);
-                }
-                else
-                {
-                    var ventana = new StickerWindow(path);
+                    // Buscar el TextBox hermano (EscalaInput) dentro del mismo DataTemplate
+                    var parent = VisualTreeHelper.GetParent(chk);
+                    while (parent is not StackPanel)
+                        parent = VisualTreeHelper.GetParent(parent);
+
+                    int escala = 100;
+                    var childrenCount = VisualTreeHelper.GetChildrenCount(parent);
+                    for (int i = 0; i < childrenCount; i++)
+                    {
+                        var child = VisualTreeHelper.GetChild(parent, i);
+                        if (child is StackPanel inner)
+                        {
+                            for (int j = 0; j < VisualTreeHelper.GetChildrenCount(inner); j++)
+                            {
+                                var txt = VisualTreeHelper.GetChild(inner, j) as TextBox;
+                                if (txt != null && txt.Tag as string == path)
+                                {
+                                    int.TryParse(txt.Text, out escala);
+                                    escala = Math.Clamp(escala, 10, 500);
+                                }
+                            }
+                        }
+                    }
+
+                    var ventana = new StickerWindow(path, escala);
                     ventana.Closed += (s, args) => ventanasAbiertas.Remove(path);
                     ventanasAbiertas[path] = ventana;
                     ventana.Show();
+                }
+                else
+                {
+                    if (ventanasAbiertas.ContainsKey(path))
+                    {
+                        ventanasAbiertas[path].Close();
+                        ventanasAbiertas.Remove(path);
+                    }
                 }
             }
         }

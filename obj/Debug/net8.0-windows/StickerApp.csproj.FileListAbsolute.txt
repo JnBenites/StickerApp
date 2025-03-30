@@ -1,6 +1,3 @@
-C:\Users\K\Documents\GitHub\StickerApp\bin\Debug\net8.0-windows\StickerApp.exe
-C:\Users\K\Documents\GitHub\StickerApp\bin\Debug\net8.0-windows\WpfAnimatedGif.dll
-C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\StickerApp.csproj.AssemblyReference.cache
 C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\MainWindow.baml
 C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\StickerWindow.baml
 C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\App.baml
@@ -12,13 +9,16 @@ C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\StickerApp.g.res
 C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\StickerApp.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\StickerApp.csproj.CoreCompileInputs.cache
 C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\StickerApp.sourcelink.json
-C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\StickerApp.csproj.Up2Date
-C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\StickerApp.dll
-C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\refint\StickerApp.dll
-C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\StickerApp.pdb
+C:\Users\K\Documents\GitHub\StickerApp\bin\Debug\net8.0-windows\StickerApp.exe
 C:\Users\K\Documents\GitHub\StickerApp\bin\Debug\net8.0-windows\StickerApp.deps.json
 C:\Users\K\Documents\GitHub\StickerApp\bin\Debug\net8.0-windows\StickerApp.runtimeconfig.json
 C:\Users\K\Documents\GitHub\StickerApp\bin\Debug\net8.0-windows\StickerApp.dll
 C:\Users\K\Documents\GitHub\StickerApp\bin\Debug\net8.0-windows\StickerApp.pdb
+C:\Users\K\Documents\GitHub\StickerApp\bin\Debug\net8.0-windows\WpfAnimatedGif.dll
+C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\StickerApp.csproj.AssemblyReference.cache
+C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\StickerApp.csproj.Up2Date
+C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\StickerApp.dll
+C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\refint\StickerApp.dll
+C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\StickerApp.pdb
 C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\StickerApp.genruntimeconfig.cache
 C:\Users\K\Documents\GitHub\StickerApp\obj\Debug\net8.0-windows\ref\StickerApp.dll
