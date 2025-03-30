@@ -1,0 +1,68 @@
+<Window x:Class="StickerApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wpfAnimatedGif="http://wpfanimatedgif.codeplex.com"
+        Title="Sticker App" Height="350" Width="525"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Menú lateral -->
+        <Border Grid.Column="0" Background="#FF2D2D30" Padding="10">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                    <Image Source="Logo.png" Width="32" Height="32"/>
+                    <TextBlock Text="StickerApp" Foreground="White" FontSize="16"
+                               FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Button x:Name="BtnImagenes" Content="Imágenes"
+                        Style="{StaticResource MenuButtonStyle}" Click="BtnImagenes_Click"/>
+                <Button x:Name="BtnAjustes" Content="Ajustes"
+                        Style="{StaticResource MenuButtonStyle}" Click="BtnAjustes_Click"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Panel derecho -->
+        <Grid Grid.Column="1">
+            <!-- Panel de imágenes -->
+            <StackPanel x:Name="PanelImagenes" Margin="10">
+                <Button Content="Agregar nueva imagen" Width="150" Margin="0,0,0,10"
+                        Click="AgregarImagen_Click"/>
+                <ListView x:Name="ListaImagenes">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{Binding Path}" Width="50" Height="50" Margin="0,0,10,0"/>
+                                <Button Content="Mostrar Sticker" Margin="0,0,10,0"
+                                        Click="MostrarSticker_Click" Tag="{Binding Path}"/>
+                                <Button Content="Eliminar"
+                                        Click="EliminarImagen_Click" Tag="{Binding Path}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+
+            <!-- Panel de ajustes -->
+            <StackPanel x:Name="PanelAjustes" Margin="10" Visibility="Collapsed">
+                <CheckBox x:Name="ChkEjecutarInicio" Content="Ejecutar al inicio" Margin="0,0,0,10"/>
+                <GroupBox Header="Información de la App" Margin="0,20,0,0">
+                    <StackPanel>
+                        <TextBlock Text="StickerApp v1.0" Margin="0,0,0,5"/>
+                        <TextBlock Text="Aplicación para mostrar stickers en el escritorio" Margin="0,0,0,5"/>
+                        <TextBlock>
+                            <Hyperlink NavigateUri="https://github.com/tuusuario/stickerapp"
+                                       RequestNavigate="Hyperlink_RequestNavigate">
+                                Visitar GitHub
+                            </Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
