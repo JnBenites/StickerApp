@@ -10,6 +10,9 @@ namespace StickerApp
 {
     public partial class MainWindow : Window
     {
+
+        private Dictionary<string, StickerWindow> ventanasAbiertas = new();
+
         public class ImagenItem
         {
             public string Path { get; set; }
@@ -21,6 +24,24 @@ namespace StickerApp
             CargarImagenes();
         }
 
+
+        private void EliminarImagen_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is string path)
+            {
+                // 1. Cerrar el sticker si está abierto
+                if (ventanasAbiertas.ContainsKey(path))
+                {
+                    ventanasAbiertas[path].Close();
+                    ventanasAbiertas.Remove(path);
+                }
+
+                // 2. Eliminar la imagen de la lista
+                var lista = new List<ImagenItem>(ListaImagenes.ItemsSource as IEnumerable<ImagenItem>);
+                lista.RemoveAll(i => i.Path == path);
+                ListaImagenes.ItemsSource = lista;
+            }
+        }
         private void CargarImagenes()
         {
             List<ImagenItem> imagenes = new List<ImagenItem>
@@ -63,21 +84,22 @@ namespace StickerApp
             }
         }
 
-        private void MostrarSticker_Click(object sender, RoutedEventArgs e)
+        private void Sticker_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.Tag is string path)
             {
-                new StickerWindow(path).Show();
-            }
-        }
-
-        private void EliminarImagen_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn && btn.Tag is string path)
-            {
-                var lista = new List<ImagenItem>(ListaImagenes.ItemsSource as IEnumerable<ImagenItem>);
-                lista.RemoveAll(i => i.Path == path);
-                ListaImagenes.ItemsSource = lista;
+                if (ventanasAbiertas.ContainsKey(path))
+                {
+                    ventanasAbiertas[path].Close();
+                    ventanasAbiertas.Remove(path);
+                }
+                else
+                {
+                    var ventana = new StickerWindow(path);
+                    ventana.Closed += (s, args) => ventanasAbiertas.Remove(path);
+                    ventanasAbiertas[path] = ventana;
+                    ventana.Show();
+                }
             }
         }
 

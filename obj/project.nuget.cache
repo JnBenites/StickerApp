@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "RP6vDWMX0Nw=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\K\\Documents\\GitHub\\StickerApp\\StickerApp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\K\\.nuget\\packages\\wpfanimatedgif\\2.0.2\\wpfanimatedgif.2.0.2.nupkg.sha512",
+    "C:\\Users\\K\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.14\\microsoft.netcore.app.ref.8.0.14.nupkg.sha512",
+    "C:\\Users\\K\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.14\\microsoft.windowsdesktop.app.ref.8.0.14.nupkg.sha512",
+    "C:\\Users\\K\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.14\\microsoft.aspnetcore.app.ref.8.0.14.nupkg.sha512",
+    "C:\\Users\\K\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.14\\microsoft.netcore.app.host.win-x64.8.0.14.nupkg.sha512"
+  ],
+  "logs": []
+}
