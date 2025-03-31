@@ -116,7 +116,7 @@ namespace StickerApp
                 }
             }
         }
-
+        // BORRAR 
         private void AplicarEscala_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.Tag is string path)
@@ -157,6 +157,44 @@ namespace StickerApp
             }
         }
 
+    // BORRAR   
+        private void AumentarEscala_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is string path)
+            {
+                CambiarEscala(path, +25); // Aumenta 25 en cada clic
+            }
+        }
+
+        private void DisminuirEscala_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is string path)
+            {
+                CambiarEscala(path, -25); // Disminuye 25 en cada clic
+            }
+        }
+
+        private void CambiarEscala(string path, int cambio)
+        {
+            var lista = (ListaImagenes.ItemsSource as List<ImagenItem>) ?? new();
+            var img = lista.FirstOrDefault(i => i.Path == path);
+            if (img != null)
+            {
+                img.Escala = Math.Clamp(img.Escala + cambio, 100, 600);
+
+                // Actualiza ventana si está abierta
+                if (ventanasAbiertas.TryGetValue(path, out var win))
+                {
+                    win.ActualizarEscala(img.Escala);
+                }
+
+                // Refresca la lista para que se actualice el TextBlock
+                ListaImagenes.ItemsSource = null;
+                ListaImagenes.ItemsSource = lista;
+
+                GuardarConfiguracion();
+            }
+        }
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });

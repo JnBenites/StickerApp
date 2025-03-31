@@ -1,7 +1,3 @@
-/obj
-/bin
-/bin
-/obj
-/bin
-/obj
-/bin
+# Ignorar las carpetas /obj y /bin
+/obj/
+/bin/

@@ -40,11 +40,9 @@
 
                                 <!-- Escala con botón aplicar -->
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
-                                    <TextBox Width="40" Text="{Binding Escala}" Tag="{Binding Path}" x:Name="EscalaInput" Margin="0,0,5,0"/>
-                                    <Button Content="✔" Width="25" Height="25"
-                                            Tag="{Binding Path}"
-                                            Click="AplicarEscala_Click"
-                                            ToolTip="Aplicar escala"/>
+                                    <Button Content="+" Width="25" Height="25" Tag="{Binding Path}" Click="DisminuirEscala_Click" ToolTip="Disminuir escala"/>
+                                    <Button Content="-" Width="25" Height="25" Tag="{Binding Path}" Click="AumentarEscala_Click" ToolTip="Aumentar escala"/>
+                                <!--     <TextBlock Text="{Binding Escala}" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0" Foreground="White"/> -->
                                 </StackPanel>
 
                                 <CheckBox Content="Estado" Checked="Sticker_Click" Unchecked="Sticker_Click"
