@@ -10,6 +10,8 @@ namespace StickerApp
 {
     public partial class StickerWindow : Window
     {
+        private BitmapImage bitmapOriginal; // ← 🔹 Imagen original cargada
+
         public StickerWindow(string imagePath, int escalaPorcentaje)
         {
             InitializeComponent();
@@ -20,18 +22,15 @@ namespace StickerApp
 
                 if (File.Exists(rutaAbsoluta))
                 {
-                    var image = new BitmapImage();
-                    image.BeginInit();
-                    image.UriSource = new Uri(rutaAbsoluta, UriKind.Absolute);
-                    image.CacheOption = BitmapCacheOption.OnLoad;
-                    image.EndInit();
+                    bitmapOriginal = new BitmapImage(); // ← 🔹 Guardamos la imagen
+                    bitmapOriginal.BeginInit();
+                    bitmapOriginal.UriSource = new Uri(rutaAbsoluta, UriKind.Absolute);
+                    bitmapOriginal.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapOriginal.EndInit();
 
-                    // Muestra imagen animada (GIF incluido)
-                    ImageBehavior.SetAnimatedSource(StickerImage, image);
+                    ImageBehavior.SetAnimatedSource(StickerImage, bitmapOriginal);
 
-                    // Aplica escala
-                    StickerImage.Width = image.PixelWidth * (escalaPorcentaje / 100.0);
-                    StickerImage.Height = image.PixelHeight * (escalaPorcentaje / 100.0);
+                    AplicarEscala(escalaPorcentaje); // ← 🔹 Escala inicial
                 }
                 else
                 {
@@ -52,7 +51,7 @@ namespace StickerApp
                     DragMove();
             };
 
-            // Hace la ventana siempre visible (topmost)
+            // Siempre encima
             Loaded += (s, e) =>
             {
                 var hWnd = new WindowInteropHelper(this).Handle;
@@ -61,7 +60,20 @@ namespace StickerApp
             };
         }
 
-        // Función nativa de Windows para mantener en topmost
+        private void AplicarEscala(int porcentaje)
+        {
+            if (bitmapOriginal == null) return;
+
+            double factor = porcentaje / 100.0;
+            StickerImage.Width = bitmapOriginal.PixelWidth * factor;
+            StickerImage.Height = bitmapOriginal.PixelHeight * factor;
+        }
+
+        public void ActualizarEscala(int nuevaEscala)
+        {
+            AplicarEscala(nuevaEscala);
+        }
+
         [DllImport("user32.dll")]
         private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter,
             int X, int Y, int cx, int cy, uint uFlags);
@@ -69,12 +81,5 @@ namespace StickerApp
         private const UInt32 SWP_NOSIZE = 0x0001;
         private const UInt32 SWP_NOMOVE = 0x0002;
         private const UInt32 SWP_SHOWWINDOW = 0x0040;
-
-        // Permite cambiar la escala visual del sticker en tiempo real
-        public void ActualizarEscala(int nuevaEscala)
-        {
-            StickerImage.Width = StickerImage.Source.Width * (nuevaEscala / 100.0);
-            StickerImage.Height = StickerImage.Source.Height * (nuevaEscala / 100.0);
-        }
     }
 }

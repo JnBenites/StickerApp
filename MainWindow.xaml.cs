@@ -1,4 +1,3 @@
-// MainWindow.xaml.cs
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,6 +6,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Navigation;
 
 namespace StickerApp
@@ -26,6 +26,7 @@ namespace StickerApp
         {
             InitializeComponent();
             CargarImagenes();
+
             Closing += (s, e) =>
             {
                 GuardarConfiguracion();
@@ -109,8 +110,49 @@ namespace StickerApp
                 if (img != null)
                 {
                     img.Escala = escala;
+
                     if (ventanasAbiertas.TryGetValue(path, out var win))
                         win.ActualizarEscala(escala);
+                }
+            }
+        }
+
+        private void AplicarEscala_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is string path)
+            {
+                // Buscar el contenedor de la TextBox
+                var container = VisualTreeHelper.GetParent(btn);
+                while (container is not StackPanel)
+                    container = VisualTreeHelper.GetParent(container);
+
+                TextBox txtEscala = null;
+
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(container); i++)
+                {
+                    if (VisualTreeHelper.GetChild(container, i) is TextBox txt &&
+                        txt.Tag is string tag && tag == path)
+                    {
+                        txtEscala = txt;
+                        break;
+                    }
+                }
+
+                if (txtEscala != null && int.TryParse(txtEscala.Text, out int escala))
+                {
+                    escala = Math.Clamp(escala, 10, 500);
+
+                    var lista = (ListaImagenes.ItemsSource as List<ImagenItem>) ?? new();
+                    var img = lista.FirstOrDefault(i => i.Path == path);
+                    if (img != null)
+                    {
+                        img.Escala = escala;
+
+                        if (ventanasAbiertas.TryGetValue(path, out var win))
+                            win.ActualizarEscala(escala);
+
+                        GuardarConfiguracion();
+                    }
                 }
             }
         }

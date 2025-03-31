@@ -32,24 +32,29 @@
             <StackPanel x:Name="PanelImagenes" Margin="10">
                 <Button Content="Agregar nueva imagen" Width="150" Margin="0,0,0,10"
                         Click="AgregarImagen_Click"/>
-                    <ListView x:Name="ListaImagenes">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10" Background="#582E67">
-                                    <Image Source="{Binding Path}" Width="100" Height="50" Margin="0,0,10,0"/>
+                <ListView x:Name="ListaImagenes">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10" Background="#582E67">
+                                <Image Source="{Binding Path}" Width="100" Height="50" Margin="0,0,10,0"/>
 
-                                    <!-- Escala individual -->
-                                    <StackPanel Orientation="Horizontal" Width="100" VerticalAlignment="Center" Margin="0,0,10,0">
-                                        <TextBlock Text="%" VerticalAlignment="Center" Foreground="Black" Margin="0,0,3,0"/>
-                                        <TextBox Width="30" Text="100" Tag="{Binding Path}" x:Name="EscalaInput"/>
-                                    </StackPanel>
-
-                                    <CheckBox Content="Estado" Checked="Sticker_Click" Unchecked="Sticker_Click" Tag="{Binding Path}" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                                    <Button Content="Eliminar" Click="EliminarImagen_Click" Tag="{Binding Path}" Background="#F5E6E3"/>
+                                <!-- Escala con botón aplicar -->
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <TextBox Width="40" Text="{Binding Escala}" Tag="{Binding Path}" x:Name="EscalaInput" Margin="0,0,5,0"/>
+                                    <Button Content="✔" Width="25" Height="25"
+                                            Tag="{Binding Path}"
+                                            Click="AplicarEscala_Click"
+                                            ToolTip="Aplicar escala"/>
                                 </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+
+                                <CheckBox Content="Estado" Checked="Sticker_Click" Unchecked="Sticker_Click"
+                                        Tag="{Binding Path}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+
+                                <Button Content="Eliminar" Click="EliminarImagen_Click" Tag="{Binding Path}" Background="#F5E6E3"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </StackPanel>
 
             <!-- Panel de ajustes -->
