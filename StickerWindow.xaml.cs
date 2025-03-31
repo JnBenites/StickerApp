@@ -1,16 +1,18 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using System.Windows.Interop;
+using System.Runtime.InteropServices;
 using WpfAnimatedGif;
 
 namespace StickerApp
 {
     public partial class StickerWindow : Window
     {
-        private BitmapImage bitmapOriginal; // ← 🔹 Imagen original cargada
+        private BitmapImage bitmapOriginal;
+        private double baseWidth;
+        private double baseHeight;
 
         public StickerWindow(string imagePath, int escalaPorcentaje)
         {
@@ -22,7 +24,7 @@ namespace StickerApp
 
                 if (File.Exists(rutaAbsoluta))
                 {
-                    bitmapOriginal = new BitmapImage(); // ← 🔹 Guardamos la imagen
+                    bitmapOriginal = new BitmapImage();
                     bitmapOriginal.BeginInit();
                     bitmapOriginal.UriSource = new Uri(rutaAbsoluta, UriKind.Absolute);
                     bitmapOriginal.CacheOption = BitmapCacheOption.OnLoad;
@@ -30,56 +32,44 @@ namespace StickerApp
 
                     ImageBehavior.SetAnimatedSource(StickerImage, bitmapOriginal);
 
-                    AplicarEscala(escalaPorcentaje); // ← 🔹 Escala inicial
+                    // Guardamos el tamaño base original de la imagen
+                    baseWidth = bitmapOriginal.PixelWidth;
+                    baseHeight = bitmapOriginal.PixelHeight;
+
+                    SetWindowSize(escalaPorcentaje);
                 }
                 else
                 {
-                    MessageBox.Show($"No se encontró la imagen: {rutaAbsoluta}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("No se encontró la imagen.");
                     Close();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar la imagen:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error al cargar imagen: {ex.Message}");
                 Close();
             }
 
-            // Permite arrastrar el sticker
             MouseLeftButtonDown += (s, e) =>
             {
                 if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
                     DragMove();
             };
-
-            // Siempre encima
-            Loaded += (s, e) =>
-            {
-                var hWnd = new WindowInteropHelper(this).Handle;
-                SetWindowPos(hWnd, new IntPtr(-1), 0, 0, 0, 0,
-                    SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
-            };
-        }
-
-        private void AplicarEscala(int porcentaje)
-        {
-            if (bitmapOriginal == null) return;
-
-            double factor = porcentaje / 100.0;
-            StickerImage.Width = bitmapOriginal.PixelWidth * factor;
-            StickerImage.Height = bitmapOriginal.PixelHeight * factor;
         }
 
         public void ActualizarEscala(int nuevaEscala)
         {
-            AplicarEscala(nuevaEscala);
+            SetWindowSize(nuevaEscala);
         }
 
-        [DllImport("user32.dll")]
-        private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter,
-            int X, int Y, int cx, int cy, uint uFlags);
-
-        private const UInt32 SWP_NOSIZE = 0x0001;
-        private const UInt32 SWP_NOMOVE = 0x0002;
-        private const UInt32 SWP_SHOWWINDOW = 0x0040;
+        private void SetWindowSize(int porcentaje)
+        {
+            if (bitmapOriginal != null)
+            {
+                double factor = porcentaje / 100.0;
+                this.Width = baseWidth * factor;
+                this.Height = baseHeight * factor;
+            }
+        }
     }
 }

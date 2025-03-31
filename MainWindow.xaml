@@ -40,15 +40,17 @@
 
                                 <!-- Escala con botón aplicar -->
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
-                                    <Button Content="+" Width="25" Height="25" Tag="{Binding Path}" Click="DisminuirEscala_Click" ToolTip="Disminuir escala"/>
-                                    <Button Content="-" Width="25" Height="25" Tag="{Binding Path}" Click="AumentarEscala_Click" ToolTip="Aumentar escala"/>
-                                <!--     <TextBlock Text="{Binding Escala}" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0" Foreground="White"/> -->
+                                    <TextBlock Text="{Binding Escala}" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0" Foreground="White"/>
+                                    <Button Content="+" Width="25" Height="25" Tag="{Binding Id}" Click="AumentarEscala_Click" ToolTip="Aumentar escala"/>
+                                    <Button Content="-" Width="25" Height="25" Tag="{Binding Id}" Click="DisminuirEscala_Click" ToolTip="Disminuir escala"/>
                                 </StackPanel>
 
-                                <CheckBox Content="Estado" Checked="Sticker_Click" Unchecked="Sticker_Click"
-                                        Tag="{Binding Path}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                <CheckBox IsChecked="{Binding Activo}" Tag="{Binding Id}"
+                                        Checked="Sticker_Click" Unchecked="Sticker_Click"
+                                        Content="Estado" Margin="0,0,10,0" VerticalAlignment="Center"/>
 
-                                <Button Content="Eliminar" Click="EliminarImagen_Click" Tag="{Binding Path}" Background="#F5E6E3"/>
+
+                                <Button Content="Eliminar" Click="EliminarImagen_Click" Tag="{Binding Id}" Background="#F5E6E3"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>

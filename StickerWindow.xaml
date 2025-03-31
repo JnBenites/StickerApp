@@ -8,11 +8,15 @@
         Background="Transparent"
         Topmost="True"
         ShowInTaskbar="False"
-        Width="auto" Height="auto">
-    
+        ResizeMode="NoResize"
+        Width="200" Height="200"> <!-- Cambia esto dinámicamente si quieres -->
+
     <Grid Background="Transparent">
         <Viewbox Stretch="Uniform">
-            <Image x:Name="StickerImage" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Image x:Name="StickerImage"
+                   Stretch="Uniform"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
         </Viewbox>
     </Grid>
 </Window>

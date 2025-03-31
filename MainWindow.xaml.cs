@@ -13,13 +13,21 @@ namespace StickerApp
 {
     public partial class MainWindow : Window
     {
-        private Dictionary<string, StickerWindow> ventanasAbiertas = new();
+        private Dictionary<int, StickerWindow> ventanasAbiertas = new();
         private const string ConfigFile = "config.json";
 
         public class ImagenItem
         {
+            private static int contador = 0;
+            public int Id { get; set; }
             public string Path { get; set; }
             public int Escala { get; set; } = 100;
+            public bool Activo { get; set; } = false;
+
+            public ImagenItem()
+            {
+                Id = ++contador;
+            }
         }
 
         public MainWindow()
@@ -66,13 +74,13 @@ namespace StickerApp
 
         private void EliminarImagen_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.Tag is string path)
+            if (sender is Button btn && btn.Tag is int id)
             {
-                ventanasAbiertas.Remove(path, out var win);
+                ventanasAbiertas.Remove(id, out var win);
                 win?.Close();
 
                 var lista = (ListaImagenes.ItemsSource as List<ImagenItem>) ?? new();
-                lista.RemoveAll(i => i.Path == path);
+                lista.RemoveAll(i => i.Id == id);
                 ListaImagenes.ItemsSource = null;
                 ListaImagenes.ItemsSource = lista;
             }
@@ -80,48 +88,51 @@ namespace StickerApp
 
         private void Sticker_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is CheckBox chk && chk.Tag is string path)
+            if (sender is CheckBox chk && chk.Tag is int id)
             {
-                var lista = (ListaImagenes.ItemsSource as List<ImagenItem>) ?? new();
-                var img = lista.FirstOrDefault(i => i.Path == path);
+                var lista = ListaImagenes.ItemsSource as List<ImagenItem>;
+                var img = lista?.FirstOrDefault(i => i.Id == id);
                 if (img == null) return;
 
-                if (chk.IsChecked == true)
+                img.Activo = chk.IsChecked == true;
+
+                if (img.Activo)
                 {
                     var ventana = new StickerWindow(img.Path, img.Escala);
-                    ventana.Closed += (s, args) => ventanasAbiertas.Remove(path);
-                    ventanasAbiertas[path] = ventana;
+                    ventana.Closed += (s, args) => ventanasAbiertas.Remove(id);
+                    ventanasAbiertas[id] = ventana;
                     ventana.Show();
                 }
-                else if (ventanasAbiertas.Remove(path, out var win))
+                else if (ventanasAbiertas.Remove(id, out var win))
                 {
                     win.Close();
                 }
+
+                GuardarConfiguracion();
             }
         }
 
         private void EscalaInput_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (sender is TextBox txt && txt.Tag is string path && int.TryParse(txt.Text, out int escala))
+            if (sender is TextBox txt && txt.Tag is int id && int.TryParse(txt.Text, out int escala))
             {
                 escala = Math.Clamp(escala, 10, 500);
                 var lista = (ListaImagenes.ItemsSource as List<ImagenItem>) ?? new();
-                var img = lista.FirstOrDefault(i => i.Path == path);
+                var img = lista.FirstOrDefault(i => i.Id == id);
                 if (img != null)
                 {
                     img.Escala = escala;
 
-                    if (ventanasAbiertas.TryGetValue(path, out var win))
+                    if (ventanasAbiertas.TryGetValue(id, out var win))
                         win.ActualizarEscala(escala);
                 }
             }
         }
-        // BORRAR 
+
         private void AplicarEscala_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.Tag is string path)
+            if (sender is Button btn && btn.Tag is int id)
             {
-                // Buscar el contenedor de la TextBox
                 var container = VisualTreeHelper.GetParent(btn);
                 while (container is not StackPanel)
                     container = VisualTreeHelper.GetParent(container);
@@ -131,7 +142,7 @@ namespace StickerApp
                 for (int i = 0; i < VisualTreeHelper.GetChildrenCount(container); i++)
                 {
                     if (VisualTreeHelper.GetChild(container, i) is TextBox txt &&
-                        txt.Tag is string tag && tag == path)
+                        txt.Tag is int tag && tag == id)
                     {
                         txtEscala = txt;
                         break;
@@ -140,15 +151,15 @@ namespace StickerApp
 
                 if (txtEscala != null && int.TryParse(txtEscala.Text, out int escala))
                 {
-                    escala = Math.Clamp(escala, 10, 500);
+                    escala = Math.Clamp(escala, 10, 1000);
 
                     var lista = (ListaImagenes.ItemsSource as List<ImagenItem>) ?? new();
-                    var img = lista.FirstOrDefault(i => i.Path == path);
+                    var img = lista.FirstOrDefault(i => i.Id == id);
                     if (img != null)
                     {
                         img.Escala = escala;
 
-                        if (ventanasAbiertas.TryGetValue(path, out var win))
+                        if (ventanasAbiertas.TryGetValue(id, out var win))
                             win.ActualizarEscala(escala);
 
                         GuardarConfiguracion();
@@ -157,44 +168,42 @@ namespace StickerApp
             }
         }
 
-    // BORRAR   
         private void AumentarEscala_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.Tag is string path)
+            if (sender is Button btn && btn.Tag is int id)
             {
-                CambiarEscala(path, +25); // Aumenta 25 en cada clic
+                CambiarEscala(id, +25);
             }
         }
 
         private void DisminuirEscala_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.Tag is string path)
+            if (sender is Button btn && btn.Tag is int id)
             {
-                CambiarEscala(path, -25); // Disminuye 25 en cada clic
+                CambiarEscala(id, -25);
             }
         }
 
-        private void CambiarEscala(string path, int cambio)
+        private void CambiarEscala(int id, int cambio)
         {
             var lista = (ListaImagenes.ItemsSource as List<ImagenItem>) ?? new();
-            var img = lista.FirstOrDefault(i => i.Path == path);
+            var img = lista.FirstOrDefault(i => i.Id == id);
             if (img != null)
             {
-                img.Escala = Math.Clamp(img.Escala + cambio, 100, 600);
+                img.Escala = Math.Clamp(img.Escala + cambio, 10, 2000);
 
-                // Actualiza ventana si está abierta
-                if (ventanasAbiertas.TryGetValue(path, out var win))
+                if (ventanasAbiertas.TryGetValue(id, out var win))
                 {
                     win.ActualizarEscala(img.Escala);
                 }
 
-                // Refresca la lista para que se actualice el TextBlock
                 ListaImagenes.ItemsSource = null;
                 ListaImagenes.ItemsSource = lista;
 
                 GuardarConfiguracion();
             }
         }
+
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
