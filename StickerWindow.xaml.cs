@@ -26,15 +26,17 @@ namespace StickerApp
                     image.CacheOption = BitmapCacheOption.OnLoad;
                     image.EndInit();
 
+                    // Muestra imagen animada (GIF incluido)
                     ImageBehavior.SetAnimatedSource(StickerImage, image);
 
+                    // Aplica escala
                     StickerImage.Width = image.PixelWidth * (escalaPorcentaje / 100.0);
                     StickerImage.Height = image.PixelHeight * (escalaPorcentaje / 100.0);
                 }
                 else
                 {
                     MessageBox.Show($"No se encontró la imagen: {rutaAbsoluta}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Close(); // Cierra si no se pudo cargar
+                    Close();
                 }
             }
             catch (Exception ex)
@@ -43,27 +45,36 @@ namespace StickerApp
                 Close();
             }
 
+            // Permite arrastrar el sticker
             MouseLeftButtonDown += (s, e) =>
             {
                 if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
                     DragMove();
             };
 
+            // Hace la ventana siempre visible (topmost)
             Loaded += (s, e) =>
             {
                 var hWnd = new WindowInteropHelper(this).Handle;
-                IntPtr HWND_TOPMOST = new IntPtr(-1);
-                const UInt32 SWP_NOSIZE = 0x0001;
-                const UInt32 SWP_NOMOVE = 0x0002;
-                const UInt32 SWP_SHOWWINDOW = 0x0040;
-
-                SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0,
+                SetWindowPos(hWnd, new IntPtr(-1), 0, 0, 0, 0,
                     SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
             };
         }
 
+        // Función nativa de Windows para mantener en topmost
         [DllImport("user32.dll")]
         private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter,
             int X, int Y, int cx, int cy, uint uFlags);
+
+        private const UInt32 SWP_NOSIZE = 0x0001;
+        private const UInt32 SWP_NOMOVE = 0x0002;
+        private const UInt32 SWP_SHOWWINDOW = 0x0040;
+
+        // Permite cambiar la escala visual del sticker en tiempo real
+        public void ActualizarEscala(int nuevaEscala)
+        {
+            StickerImage.Width = StickerImage.Source.Width * (nuevaEscala / 100.0);
+            StickerImage.Height = StickerImage.Source.Height * (nuevaEscala / 100.0);
+        }
     }
 }
